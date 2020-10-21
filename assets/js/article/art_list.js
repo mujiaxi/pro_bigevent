@@ -141,4 +141,24 @@ $(function () {
             layer.close(index);
         });
     })
+    //通过代理方式给编辑按钮添加点击事件
+    $('tbody').on('click', '.btn-add', function () {
+        var id = $(this).attr('data-id')
+        // console.log(id);
+        $.ajax({
+            method: 'GET',
+            url: '/my/article/' + id,
+            success: function (res) {
+                // console.log(res);
+                if (res.status !== 0) {
+                    return layer.msg('获取文章失败！')
+                }
+                layer.msg('获取文章成功！')
+                var datas = JSON.stringify(res.data)
+                localStorage.setItem('shuju',datas)
+                location.href = '/article/bianji.html'
+            }
+        })
+        
+    })
 })

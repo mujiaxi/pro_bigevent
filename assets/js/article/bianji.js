@@ -1,9 +1,19 @@
 $(function () {
     var layer = layui.layer
     var form = layui.form
+    
     initCate()
     // 初始化富文本编辑器
     initEditor()
+    //初始化页面
+    initYeMian()
+    function  initYeMian(){
+        var data = JSON.parse(localStorage.getItem('shuju'))
+        // console.log(data);
+         // 调用form.val()快速为表单赋值
+         form.val('formUserInfo',data);
+        
+    }
     //定义加载文章分类的方法
     function initCate() {
         $.ajax({
@@ -16,7 +26,7 @@ $(function () {
                 // 调用模板引擎，渲染下拉菜单
                 var htmlstr = template('tpl-xiala', res)
                 $('[name=cate_id]').html(htmlstr)
-
+                initYeMian()
                 form.render()
             }
         });
@@ -92,7 +102,7 @@ $(function () {
     function publishArticle(fd) {
         $.ajax({
             method: 'POST',
-            url: '/my/article/add',
+            url: '/my/article/edit',
             data: fd,
             
             // 注意：如果向服务器提交的是 FormData 格式的数据，
@@ -104,6 +114,7 @@ $(function () {
                     return layer.msg('发布文章失败！')
                 }
                 layer.msg('发布文章成功！')
+                localStorage.removeItem('shuju');
                 // 发布文章成功后，跳转到文章列表页面
                 location.href = '/article/art_list.html'
             }
